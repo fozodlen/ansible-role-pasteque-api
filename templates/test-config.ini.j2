@@ -1,0 +1,25 @@
+; Tests don't rely upon system modules
+; and set their own application context
+; Database info
+database/type = {{ pasteque_api_test_user.db_type }}
+database/host = {{ pasteque_api_test_user.db_host }}
+database/port = {{ pasteque_api_test_user.db_port }}
+database/name = {{ pasteque_api_test_user.db_name }}
+database/user = {{ pasteque_api_test_user.db_user }}
+database/password = {{ pasteque_api_test_user.db_password }}
+
+; GPG config, path are relative to pasteque directory when starting with '.'
+gpg/path = {{ pasteque_api_test_user.gpg_path }}
+gpg/fingerprint = {{ pasteque_api_test_user.gpg_fingerprint }}
+
+; Http tests target a valid local test instance
+; that is tore down after each calls, thus must be this one.
+; The test user must use the same database than the one
+; defined above.
+http/host = {{ pasteque_api_test_user.http_host }}
+http/user = {{ pasteque_api_test_user.http_user }}
+http/password = {{ pasteque_api_test_user.http_password }}
+
+; Phpunit uses it's own default timezone. Set your server timezone
+; for local checks vs http calls.
+date/timezone = "Europe/Paris"

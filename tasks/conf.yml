@@ -1,0 +1,43 @@
+---
+
+
+- name: " Conf | Create Config.ini file"
+  template:
+    src: config.ini.j2
+    dest: "{{ pasteque_api_dir }}/config/config.ini"
+    mode: 0664
+  notify: _handler_update_files_ownership
+
+- name: " Conf | Create auth directory if not exists"
+  file:
+    path: "{{ pasteque_api_dir }}/config/auth"
+    state: directory
+    mode: 0755
+  notify: _handler_update_files_ownership
+
+- name: " Conf | Copy users config files"
+  template:
+    src: user_id.ini.j2
+    dest: "{{ pasteque_api_dir }}/config/auth/{{ item.name }}_id.ini"
+    mode: 0664
+  loop: "{{ pasteque_api_users }}"
+  loop_control:
+    label: "{{ item.name }}"
+  notify: _handler_update_files_ownership
+
+- name: " Conf | Copy DB config files"
+  template:
+    src: user_db.ini.j2
+    dest: "{{ pasteque_api_dir }}/config/auth/{{ item.name }}_db.ini"
+    mode: 0664
+  loop: "{{ pasteque_api_users }}"
+  loop_control:
+    label: "{{ item.name }}"
+  notify: _handler_update_files_ownership
+
+- name: " Conf | Copy TEST config file"
+  template:
+    src: test-config.ini.j2
+    dest: "{{ pasteque_api_dir }}/config/test-config.ini"
+    mode: 0664
+  notify: _handler_update_files_ownership

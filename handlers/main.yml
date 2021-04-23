@@ -1,0 +1,10 @@
+---
+
+- name: _handler_update_files_ownership
+  file:
+    path: "{{ pasteque_api_dir }}"
+    state: directory
+    recurse: yes
+    owner: root
+    group: www-data
+  become: yes

@@ -1,0 +1,74 @@
+core_ident = "inifile"
+ident/inifile/path = "{{ pasteque_api_dir }}/config/auth"
+
+core_database = "inifile"
+database/inifile/path = "{{ pasteque_api_dir }}/config/auth"
+
+; JWT auth and origin
+;--------------------
+; Validity in seconds of an auth token
+jwt_timeout = 600
+; Set this to a superstrong password
+jwt_secret = "XghPw8[=Jg8[4{/2D:v%+3R{9n55cNQZ^QDFi67#3~6P]D6f;}:e5t8e8W8?B<w;VFpHu?G9pZ=eSxN<XKs537Wdk7%*8ns-D=_iQCd]pNA757n3}jZNZSv-)t3_{[p(sFBrx.6z)47[VW]r9%USihNB%ShKZG^y/678ExP2hHtv{93ls -lan8Kjp(2r*Pzh98SyuM6AH4ju^22qvtmdQEQ3=96tgX/Q-@#/*])9M727p67G48*]j=7*"
+
+; Allowed origins, required for jsadmin for cross-site scripting.
+; Default is "", which disallows cross-site scripting.
+; Uncomment to allow undefined domains to connect (like file://). Not recommended.
+; allowed_origin = "null"
+; Uncomment to allow calls from everywhere. Not recommended.
+allowed_origin = *
+; Uncomment to allow calls from a whitelist.
+; Set multiple entries for multiple domains.
+;allowed_origin[] = http://<domain>
+;allowed_origin[] = http://<other domain>
+
+; GnuPG Signing
+;--------------
+; Configure the key to use to sign archives. Both the public and secret keys
+; must have been imported or created within your gpg keyring.
+; See https://gnupg.org/documentation/guides.html to create and export or
+; import keys. Use --homedir to point to the one set in gpg/path.
+; The keys must not be protected by a password to work, so please use a
+; dedicated key pair here and not your personal or business key.
+; When disabled, (enabled by default), compliance with LF2016 is broken.
+gpg/enabled = true
+; Directory for the gpg keyring. Once the keys are imported there, it can be set
+; to read-only.
+gpg/path = "./config/gpg"
+; The fingerprint of the key to use. This is the hexadecimal id you get with
+; gpg --homedir <gpg/path> --list-keys
+gpg/fingerprint = "1234123412341234123412341234123412341234"
+
+
+; Thumbnail compression
+;----------------------
+; Thumbnail max width in px. Comment or set to 0 to disable thumbnailing.
+thumbnail/width = 128
+; Thumbnail max height in px. Comment or set to 0 to disable thumbnailing.
+thumbnail/height = 128
+; Thumbnail output format. Comment or set to "original" to keep original format.
+; original|jpeg|png
+thumbnail/format = "jpeg"
+; Output quality for jpeg compression.
+thumbnail/jpeg/quality = 50
+
+
+; Logging and debuging
+;---------------------
+; Log level: one of DEBUG, INFO, WARNING, ERROR
+log_level = "WARN"
+; Uncomment to add an other log directory. System log is still enabled.
+;log_dir = "/var/log/pasteque"
+; Set to true to ease the development process,
+; display errors, disable caching, auto-generate proxies for Doctrine and such.
+debug = false
+
+; Server mode
+;------------
+; 'regular' (default)
+;    Can perfom all the regular operations for daily usage.
+; 'fiscal mirror'
+;    Can only copy and read fiscal tickets. They are designed to
+;    receive those tickets from a regular server to ensure non-alterability.
+;server_mode = "regular"
+

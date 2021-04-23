@@ -1,0 +1,49 @@
+---
+
+- name: "Main | Ensure pasteque api directory exists"
+  file:
+    path: "{{ pasteque_api_dir }}"
+    state: directory
+  register: _reg_pasteque_api_dir
+  notify: _handler_update_files_ownership
+
+- name: "Main | Clone or Update the repo"
+  git:
+    repo: "{{ pasteque_api_git_repo }}"
+    version: "{{ pasteque_api_git_version }}"
+    dest: "{{ pasteque_api_dir }}"
+    clone: true
+    update: true
+    accept_hostkey: true
+  register: _reg_pasteque_api_repo
+  notify: _handler_update_files_ownership
+
+- name: "Main | Composer update"
+  composer:
+    command: install
+    no_dev: no
+    working_dir: "{{ pasteque_api_dir }}"
+
+- name: "Main | Configures ini files"
+  include: conf.yml
+
+- name: "Main | Configure Mysql DB & users"
+  include: mysql.yml
+
+- name: "Main | Copy php-cli script"
+  copy:
+    src: cli-config.php
+    dest: "{{ pasteque_api_dir }}/cli-config.php"
+  notify: _handler_update_files_ownership
+
+- name: "Main | Install DB test structure"
+  command:
+    chdir: "{{ pasteque_api_dir }}"
+    cmd: php vendor/bin/doctrine orm:schema-tool:update --force
+  changed_when: yes
+
+- name: "Main | Generate proxies"
+  command:
+    chdir: "{{ pasteque_api_dir }}"
+    cmd: php vendor/bin/doctrine orm:generate-proxies
+  changed_when: yes

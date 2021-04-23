@@ -1,0 +1,49 @@
+---
+- name: "MySQL | Creates DB"
+  mysql_db:
+    name: "{{ item.db_name }}"
+    state: present
+  register: _reg_pasteque_db_created
+  loop: "{{ pasteque_api_users }}"
+  loop_control:
+    label: "{{ item.db_name }}"
+
+- name: "MySQL | Creates DB users"
+  mysql_user:
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    priv: "{{ item.db_name }}.*:ALL,GRANT"
+    update_password: always
+    state: present
+  loop: "{{ pasteque_api_users }}"
+  loop_control:
+    label: "{{ item.name }} on {{ item.db_name }}"
+  register: "_reg_user_created"
+
+- name: "MySQL | Create test DB"
+  mysql_db:
+    name: "{{ pasteque_api_test_user.db_name }}"
+    state: present
+
+- name: "MySQL | Create DB test user"
+  mysql_user:
+    name: "{{ pasteque_api_test_user.db_user }}"
+    password: "{{ pasteque_api_test_user.db_password }}"
+    priv: "{{ pasteque_api_test_user.db_name }}.*:ALL,GRANT"
+    update_password: on_create
+    state: present
+
+
+- name: "MySQL | Download Init DB script"
+  get_url:
+    url: https://pasteque.pro/pt/api/scripts/pasteque_init8_msql_v3.sql
+    dest: "{{ pasteque_api_dir }}"
+  register: _reg_mysql_pasteque_init_script
+
+- name: "MySQL | Init DB"
+  shell:
+    cmd: "mysql {{ item.item.db_name }} < {{ _reg_mysql_pasteque_init_script.dest }}"
+  when: item.changed
+  loop: "{{ _reg_pasteque_db_created.results }}"
+  loop_control:
+    label: "{{ item.item.name }}"

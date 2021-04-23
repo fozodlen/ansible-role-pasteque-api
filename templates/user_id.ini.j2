@@ -1,0 +1,2 @@
+login =        "{{ item.name }}"
+password =     "{{ item.password | password_hash('bcrypt')}}"

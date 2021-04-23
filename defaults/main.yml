@@ -1,0 +1,21 @@
+---
+
+domain: example.com
+
+pasteque_api_dir: "/var/www/pasteque_api"
+pasteque_api_url: "api.pasteque.{{ domain }}"
+pasteque_api_git_repo: "https://framagit.org/pasteque/pasteque-server.git"
+pasteque_api_git_version: master
+
+pasteque_api_test_user:
+  db_type: mysql
+  db_host: localhost
+  db_port: 3306
+  db_name: "pasteque_test"
+  db_user: "test"
+  db_password: "test"
+  gpg_path: "{{ pasteque_api_dir }}/config/gpg"
+  gpg_fingerprint: "1234123412341234123412341234123412341234"
+  http_host: http://localhost
+  http_user: pasteque_test
+  http_password: pasteque_test
